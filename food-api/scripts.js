@@ -6,10 +6,14 @@ window.onload = () => {
 const btn = document.querySelector('#search-btn')
 let searchItem = document.getElementById('search-box')
 
+
+
 btn.addEventListener('click',function(){
     let data  = searchItem.value;
     if(data!=''){
         let response =  fetchData(data);
+    }else{
+        alert('Enter Food Nae')
     }
 })
 
@@ -28,8 +32,17 @@ const fetchData = async (name) => {
     const res = await fetch(url);
     const data = await res.json();
     displayResult(data.meals)
-
 }
+
+const loadMealDetail = async mealId => {
+
+    const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    alert(data.meals[0].strCategory);
+    
+}
+
 
 const displayResult = (meals)=>{
     const searchResult = document.getElementById('search-result')
@@ -43,11 +56,12 @@ const displayResult = (meals)=>{
           <img src="${meal.strMealThumb}" class="img-fluid card-img-top img" alt="...">
           <div class="card-body">
             <h5 class="card-title">${meal.strMeal}</h5>
-            <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+            <p class="card-text">
+                <input onclick="loadMealDetail(${meal.idMeal})" id="dt-btn" class="btn btn-info text-white" type="submit" value="Details">
+            </p>
           </div>
-      </div>`;
-    searchResult.append(div);
-        
-    });
+        </div>`;
+        searchResult.append(div);
 
+    });
 }
